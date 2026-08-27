@@ -37,7 +37,7 @@ def kanalga_post_yuborish():
 
 # --- AVTOMATIK VAQTni BELGILASH ---
 # Sinov uchun har 1 soatda post tashlashi uchun:
-schedule.every(1).hours.do(kanalga_post_yuborish)
+schedule.every(1).minutes.do(kanalga_post_yuborish)
 
 print("Bot ishga tushdi va rejimni kutmoqda...")
 
