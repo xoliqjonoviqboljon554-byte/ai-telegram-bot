@@ -4,16 +4,15 @@ import google.generativeai as genai
 import schedule
 import telebot
 
-# --- SOZLAMALAR ---
-TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY")
-KANAL_USERNAME = "@ai_uz_lab"  # Kanalingiz username'i
+# --- SOZLAMALAR (To'g'ridan-to'g'ri yozib qo'yilgan) ---
+TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
+GEMINI_API_KEY = "AQ.Ab8RN6IiY3LWsbfk9g0kIq0_13i84cc_MptOzh8mUeY4eYYkjg"
+KANAL_USERNAME = "@ai_uz_lab"
 
 # Ulanishlarni faollashtirish
-genai.configure(api_key=GEMINI_API_KEY)
-# Gemini modeli
+genai.configure(api_key="AQ.Ab8RN6IiY3LWsbfk9g0kIq0_13i84cc_MptOzh8mUeY4eYYkjg")
 model = genai.GenerativeModel("gemini-1.5-flash")
-bot = telebot.TeleBot(TELEGRAM_TOKEN)
+bot = telebot.TeleBot("8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM")
 
 
 def kanalga_post_yuborish():
