@@ -1,50 +1,34 @@
 import os
 import time
-import google.generativeai as genai
-import schedule
 import telebot
+import google.generativeai as genai
 
-# --- SOZLAMALAR (To'g'ridan-to'g'ri yozib qo'yilgan) ---
-TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
-GEMINI_API_KEY = "AQ.Ab8RN6JGXf9FsO_tKYj_B_3FYx7UikrF715i9VTZiipm-T2bQQ"
+# Railway'dagi Variables'dan token va kalitni o'qiydi
+TELEGRAM_TOKEN = os.getenv("TELEGRAM_TOKEN")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 KANAL_USERNAME = "@ai_uz_lab"
 
-# Ulanishlarni faollashtirish
-genai.configure(api_key="AQ.Ab8RN6JGXf9FsO_tKYj_B_3FYx7UikrF715i9VTZiipm-T2bQQ")
-model = genai.GenerativeModel("gemini-1.5-flash")
-bot = telebot.TeleBot("8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM")
+# Gemini va Telegram botni sozlash
+genai.configure(api_key=GEMINI_API_KEY)
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
 
-
-def kanalga_post_yuborish():
-  try:
-    # Gemini'dan sun'iy intellekt bo'yicha qiziqarli post yozishni so'raymiz
-    prompt = (
-        "Telegram kanal uchun sun'iy intellekt (AI) haqida yangilik, foydali"
-        " prompt yoki qisqa amaliy dars tayyorla. Post qiziqarli,"
-        " emojilar bilan bezatilgan va o'zbek tilida bo'lsin."
-    )
-
-    response = model.generate_content(prompt)
-    post_matni = response.text
-
-    # Kanalga xabar yuborish
-    bot.send_message("@ai_uz_lab", post_matni)
-    print("Post muvaffaqiyatli kanalga yuborildi!")
-
-  except Exception as e:
-    print(f"Xatolik yuz berdi: {e}")
-
-
-# --- AVTOMATIK VAQTni BELGILASH ---
-# Sinov uchun har 1 soatda post tashlashi uchun:
-schedule.every(1).minutes.do(kanalga_post_yuborish)
-
-print("Bot ishga tushdi va rejimni kutmoqda...")
-
-# Ishga tushishi bilan bitta post yuborib tekshirish uchun:
-kanalga_post_yuborish()
+print("Bot ishga tushdi va har 10 sekundda post yuborishni boshladi...")
 
 # Bot tinimsiz 24/7 ishlashi uchun sikl
 while True:
-  schedule.run_pending()
-  time.sleep(1)
+    try:
+        # Gemini orqali qisqa post matnini generatsiya qilish
+        model = genai.GenerativeModel("gemini-pro")
+        prompt = "Telegram kanali uchun qiziqarli, qisqa va foydali bitta gapli fakt yoki motivatsiya yozib ber (o'zbek tilida)."
+        response = model.generate_content(prompt)
+        
+        post_matni = response.text
+        
+        # Kanalga yuborish
+        bot.send_message(KANAL_USERNAME, post_matni)
+        print("Post muvaffaqiyatli yuborildi!")
+    except Exception as e:
+        print(f"Xatolik yuz berdi: {e}")
+    
+    # 10 sekund kutish
+    time.sleep(10)
