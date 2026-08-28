@@ -6,11 +6,11 @@ import telebot
 
 # --- SOZLAMALAR (To'g'ridan-to'g'ri yozib qo'yilgan) ---
 TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
-GEMINI_API_KEY = "AQ.Ab8RN6IiY3LWsbfk9g0kIq0_13i84cc_MptOzh8mUeY4eYYkjg"
+GEMINI_API_KEY = "AQ.Ab8RN6JGXf9FsO_tKYj_B_3FYx7UikrF715i9VTZiipm-T2bQQ"
 KANAL_USERNAME = "@ai_uz_lab"
 
 # Ulanishlarni faollashtirish
-genai.configure(api_key="AQ.Ab8RN6IiY3LWsbfk9g0kIq0_13i84cc_MptOzh8mUeY4eYYkjg")
+genai.configure(api_key="AQ.Ab8RN6JGXf9FsO_tKYj_B_3FYx7UikrF715i9VTZiipm-T2bQQ")
 model = genai.GenerativeModel("gemini-1.5-flash")
 bot = telebot.TeleBot("8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM")
 
@@ -28,7 +28,7 @@ def kanalga_post_yuborish():
     post_matni = response.text
 
     # Kanalga xabar yuborish
-    bot.send_message(KANAL_USERNAME, post_matni)
+    bot.send_message("@ai_uz_lab", post_matni)
     print("Post muvaffaqiyatli kanalga yuborildi!")
 
   except Exception as e:
