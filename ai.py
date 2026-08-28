@@ -88,7 +88,7 @@ while True:
                     inglizcha_sarlavha = entry.title
                     uzbekcha_sarlavha = translate_to_uzbek(inglizcha_sarlavha)
                     
-                    caption = f"🤖 **Global AI Yangiligi**\n\n📌 **{uzbekcha_sarlavha}**\n\n🔗 Batafsil o'qish (Manba): {link}\n\n@ai_uz_lab"
+                    caption = f"🔗 Batafsil o'qish (Manba): {link}""\n\n@ai_uz_lab"
                     
                     counter += 1
                     maqola_rasmi = extract_image(entry, counter)
