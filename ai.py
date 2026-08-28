@@ -1,10 +1,10 @@
 import time
 import telebot
 
-TELEGRAM_TOKEN = "SIZNING_TELEGRAM_TOKENINGIZ"
+TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
 KANAL_USERNAME = "@ai_uz_lab"
 
-bot = telebot.TeleBot(8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM)
+bot = telebot.TeleBot(TELEGRAM_TOKEN)
 print("Ultra Pro Max kengaytirilgan bot ishga tushdi...")
 
 # Kengaytirilgan va uzunroq matnga ega postlar bazasi
