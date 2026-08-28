@@ -1,43 +1,35 @@
 import time
 import telebot
-import google.generativeai as genai
 
-# Token va kalitingizni yozing
+# Telegram bot tokeningizni yozing
 TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
-GEMINI_API_KEY = "AQ.Ab8RN6JGXf9FsO_tKYj_B_3FYx7UikrF715i9VTZiipm-T2bQQ"
 KANAL_USERNAME = "@ai_uz_lab"
 
-# Gemini va Telegram botni sozlash
-genai.configure(api_key=GEMINI_API_KEY)
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
+print("Bot ishga tushdi va xatolarsiz ishlamoqda...")
 
-print("Bot ishga tushdi va dars hamda yangiliklarni yuborishni boshladi...")
-
-# Dars va Yangiliklarni navbatma-navbat yuborish uchun mavzular
-mavzular = [
-    "Telegram kanali uchun Python yoki Sun'iy intellekt bo'yicha tushunarli, qisqa va foydali dars yozib ber (o'zbek tilida).",
-    "IT olamidagi eng so'nggi yangiliklar yoki texnologik trendlar haqida qiziqarli post yozib ber (o'zbek tilida)."
+# Kanalga yuboriladigan tayyor darslar va yangiliklar ro'yxati
+postlar = [
+    "📚 **Dars 1:** Python dasturlash tilida o'zgaruvchilar (Variables) bilan ishlash. O'zgaruvchi — bu ma'lumotlarni saqlash uchun quti.",
+    "🚀 **IT Yangilik:** Sun'iy intellekt sohasida bugun yangi tekin modellar taqdim etildi va ularning tezligi ancha oshdi.",
+    "📚 **Dars 2:** Telegram bot yaratishda `telebot` kutubxonasidan foydalanish va xabarlarga javob berish mantiqi.",
+    "🚀 **IT Yangilik:** Dasturchilar uchun sun'iy intellekt yordamchulari endi kod yozishni yanada tezlashtirmoqda."
 ]
 
 index = 0
 
 while True:
     try:
-        model = genai.GenerativeModel("gemini-1.5-flash")
-        
-        # Navbatdagi mavzuni tanlaymiz (dars yoki yangilik)
-        prompt = mavzular[index % len(mavzular)]
-        response = model.generate_content(prompt)
-        
-        post_matni = response.text
+        # Navbatdagi postni tanlaymiz
+        post_matni = postlar[index % len(postlar)]
         
         # Kanalga yuborish
-        bot.send_message(KANAL_USERNAME, post_matni)
-        print("Dars/Yangilik muvaffaqiyatli yuborildi!")
+        bot.send_message(KANAL_USERNAME, post_matni, parse_mode="Markdown")
+        print("Post muvaffaqiyatli yuborildi!")
         
         index += 1
     except Exception as e:
         print(f"Xatolik yuz berdi: {e}")
     
-    # Qancha vaqtda bir borishini shu yerda o'zgartirishingiz mumkin (masalan: 30 sekund yoki 60 sekund)
+    # Har 30 sekundda bitta post yuboradi (vaqtini o'zgartirishingiz mumkin)
     time.sleep(30)
