@@ -1,36 +1,40 @@
 import time
 import telebot
-import feedparser  # Internetdagi yangiliklarni o'qish uchun kutubxona
+import feedparser
+import os
 
 TELEGRAM_TOKEN = "8842296802:AAE78Gl1ReMvnR-F46TBTc6ATAmDE15CYKM"
 KANAL_USERNAME = "@ai_uz_lab"
 
 bot = telebot.TeleBot(TELEGRAM_TOKEN)
-print("Google yangiliklarini avtomatik ulash boti ishga tushdi...")
+print("1 daqiqada bir tekshiradigan AI yangiliklari boti ishga tushdi...")
 
-# Google News RSS orqali IT va Sun'iy intellekt bo'yicha eng so'nggi yangiliklar olinadigan havola
-RSS_URL = "https://news.google.com/rss/search?q=artificial+intelligence+programming&hl=uz&gl=UZ&ceid=UZ:uz"
+RSS_URL = "https://news.google.com/rss/search?q=sun'iy+intellekt+OR+neyrotarmoq+OR+artificial+intelligence&hl=uz&gl=UZ&ceid=UZ:uz"
 
-yuborilgan_yangiliklar = set()
+def get_sent_links():
+    if os.path.exists("sent_links.txt"):
+        with open("sent_links.txt", "r") as f:
+            return set(line.strip() for line in f)
+    return set()
+
+def save_link(link):
+    with open("sent_links.txt", "a") as f:
+        f.write(link + "\n")
+
+yuborilgan_yangiliklar = get_sent_links()
 
 while True:
     try:
-        print("Google'dan yangi ma'lumotlar tekshirilmoqda...")
         feed = feedparser.parse(RSS_URL)
         
-        # Yangiliklarni tekshirib chiqamiz
-        for entry in feed.entries[:5]:
+        for entry in reversed(feed.entries):
             link = entry.link
             
-            # Agar bu yangilik oldin yuborilmagan bo'lsa
             if link not in yuborilgan_yangiliklar:
                 sarlavha = entry.title
                 
-                # Kanalga tashlanadigan xabar matni
-                caption = f"🔥 **Google'dan Yangi Xabar / Dars**\n\n📌 **{sarlavha}p**\n\n🔗 Batafsil o'qish uchun havolaga o'ting: {link}\n\n@ai_uz_lab"
-                
-                # Tasodifiy IT mavzusidagi rasm
-                foto = "https://images.unsplash.com/photo-1518770660439-4636190af475?w=1000"
+                caption = f"🤖 **Sun'iy Intellekt Yangiligi**\n\n📌 **{sarlavha}**\n\n🔗 Batafsil o'qish: {link}\n\n@ai_uz_lab"
+                foto = "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1000"
                 
                 bot.send_photo(
                     chat_id=KANAL_USERNAME,
@@ -39,16 +43,13 @@ while True:
                     parse_mode="Markdown"
                 )
                 
-                # Yuborilganini eslab qolamiz
                 yuborilgan_yangiliklar.add(link)
-                print(f"Yangi post yuborildi: {sarlavha}")
-                
-                # Har bir xabar orasida ozgina kutish
-                time.sleep(5)
+                save_link(link)
+                print(f"Yuborildi: {sarlavha}")
                 break
                 
     except Exception as e:
-        print(f"Xato yuz berdi: {e}")
+        print(f"Xato: {e}")
     
-    # Har 10 sekundda (yoki o'zingiz xohlagan vaqtda) Google'ni qayta tekshiradi
-    time.sleep(10)
+    # Har 1 daqiqada (60 soniyada) yangi xabarlarni tekshiradi
+    time.sleep(60)
